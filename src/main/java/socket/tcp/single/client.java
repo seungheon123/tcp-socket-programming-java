@@ -11,7 +11,7 @@ public class client {
     public static void main(String[] args) throws IOException {
         try {
             Socket socket = new Socket("127.0.0.1", 9999);
-            System.out.println(">echo-client is activated");
+            System.out.println(">echo-client is activated with port number"+socket.getLocalPort());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             Scanner scanner = new Scanner(System.in);
@@ -26,7 +26,6 @@ public class client {
         }catch (IOException e){
             e.printStackTrace();
         }
-
 
     }
 }
