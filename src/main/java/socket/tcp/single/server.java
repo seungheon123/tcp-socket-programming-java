@@ -12,35 +12,45 @@ import java.util.Scanner;
 public class server {
     public static int tcpServerPort = 9999;
     public static void main(String[] args) throws IOException {
+        ServerSocket ssk = null;
+        Socket socket = null;
+        Scanner scanner = new Scanner(System.in);
+        BufferedReader in;
+        PrintWriter out;
         try {
             //서버 생성
-            ServerSocket ssk = new ServerSocket(tcpServerPort);
+            ssk = new ServerSocket(tcpServerPort);
             System.out.println("> eco-server is activated");
-            Scanner scanner = new Scanner(System.in);
             //Server is bind
-            while(true){
-                //Client 접속 accept
-                Socket socket = ssk.accept();
-                System.out.println(socket);
-                System.out.println("> client connect by IP address" + socket.getInetAddress() + "with Port number"
-                        + socket.getPort());
-                //Client가 보낸 데이터 출력
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                while (true) {
-                    String input = in.readLine();
-                    if ("quit".equalsIgnoreCase(input)) {
-                        socket.close();
-                        break;
-                    }
-                    System.out.println(">Client: " + socket.getPort() + input);
-                }
+            //Client 접속 accept
+            socket = ssk.accept();
+            System.out.println(socket);
+            System.out.println("> client connect by IP address" + socket.getInetAddress() + " with Port number"
+                    + socket.getPort());
+            //Client가 보낸 데이터 출력
+            while(true) {
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream());
+                String input = in.readLine();
+                if ("quit".equalsIgnoreCase(input)) break;
+                System.out.println(">Client " + socket.getPort() + ":" + input);
                 System.out.print(">");
-                String message = scanner.nextLine();
-                if("quit".equalsIgnoreCase(message)) break;
+                String output = scanner.nextLine();
+                out.println(output);
+                out.flush();
+                if ("quit".equalsIgnoreCase(output)) break;
             }
-            ssk.close();
         }catch (IOException e){
             e.printStackTrace();
+        }finally {
+            try{
+                scanner.close();
+                socket.close();
+                ssk.close();
+                System.out.println("> echo-server is de-activated");
+            }catch (IOException e){
+                System.out.println("> echo-server error");
+            }
         }
     }
 
