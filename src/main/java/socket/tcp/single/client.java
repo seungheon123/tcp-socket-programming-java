@@ -23,8 +23,8 @@ public class client {
                 out.flush();
                 if("quit".equalsIgnoreCase(output)) break;
                 String input = in.readLine();
-                System.out.println(">Server " +socket.getPort()+":"+ input);
                 if("quit".equalsIgnoreCase(input))break;
+                System.out.println(">Server " +socket.getPort()+":"+ input);
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -35,7 +35,6 @@ public class client {
                 System.out.println("> echo-client is de-activated");
             }catch (IOException e){
                 System.out.println("> echo-client error");
-
             }
         }
 
